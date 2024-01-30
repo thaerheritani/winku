@@ -1,3 +1,16 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+user_search:
+    path: search
+    controller: App\Controller\SearchController::search
+    methods: [GET, POST]
+user_profile:
+    path: '/user/{id}'
+    controller: 'App\Controller\ProfilController::showProfile'
+    methods: ['GET']
+edit_post:
+    path: '/edit_post/{id}'
+    controller: 'App\Controller\PostController::editPost'
+    methods: ['GET', 'POST']
+

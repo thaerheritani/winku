@@ -1,0 +1,103 @@
+{% extends 'post/post-layout.html.twig' %}
+{% form_theme form 'bootstrap_5_horizontal_layout.html.twig' %}
+{% block stylesheets %}
+
+	{% block stylesheets %}
+
+		<link rel="icon" href="{{ asset('images/fav.png') }}" type="image/png" sizes="16x16">
+
+		<link rel="stylesheet" href="{{ asset('css/main.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/color.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+	{% endblock %}
+{% endblock %}
+
+	{% block  pageTitle%} Bienvenue sur notre site winku{% endblock %}
+
+
+{% block content %}
+	{% include 'shared/sidbarLeft.html.twig' %}
+	<div class="row">
+		<div class="col-12">
+			{{ form_start(form) }}
+			<div class="row mb-3">
+				{{ form_label(form.gallery) }}
+				{{ form_errors(form.gallery) }}
+				<div class="col-sm-10">
+					<ul id="photo-gallery-list" class="collection-form list-group list-group-horizontal"
+					    data-prototype="{{ form_widget(form.gallery.photos.vars.prototype)|e }}"
+					    data-widget-tags="{{ '<li class="list-group-item"></li>'|e }}"
+					    data-widget-counter="{{ form.gallery.photos | length }}">
+						{% for photoField in form.gallery.photos %}
+							<li class="existantPhotos list-group-item">
+								{# ici le .value me retourne l'entité liée au champ de formulaire (une entité Photo)#}
+								<img src="{{ asset('uploads/'~photoField.vars.value.url) }}" alt="" width="100">
+								{{ form_widget(photoField, {'attr': {'class': 'd-none'}}) }}
+							</li>
+						{% endfor %}
+					</ul>
+					<button type="button"
+					        class="add-another-collection-widget btn btn-primary btn-sm"
+					        data-list-selector="#photo-gallery-list">+</button>
+
+					{% do form.gallery.setRendered %}
+				</div>
+			</div>
+			{{ form_end(form) }}
+
+		</div>
+	</div>
+
+	{% include 'shared/sidebarRight.html.twig' %}
+
+
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+	<script>
+        $(document).ready(function () {
+
+            $($('.add-another-collection-widget').attr('data-list-selector'))
+                .find('.existantPhotos').append(createButton());
+
+            $('.add-another-collection-widget').click(function (e) {
+                var list = $($(this).attr('data-list-selector'));
+                // Try to find the counter of the list or use the length of the list
+                var counter = list.data('widget-counter') || list.children().length;
+
+                // grab the prototype template
+                var newWidget = list.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your photos
+                // end name attribute looks like name="contact[photo][2]"
+                newWidget = newWidget.replace(/__name__/g, counter);
+                // Increase the counter
+                counter++;
+                // And store it, the length cannot be used if deleting widgets is allowed
+                list.data('widget-counter', counter);
+
+                // create a new list element and add it to the list
+                var newElem = $(list.attr('data-widget-tags')).html(newWidget);
+                var button = createButton();
+                newElem.find('input').after(button);
+
+                newElem.appendTo(list);
+            });
+
+
+        });
+
+        function createButton() {
+            var button = $('<button class="btn btn-danger removeElement" type="button">-</button>');
+            button.click(function(e) {
+                $(this).parents('li').remove();
+            });
+            return button;
+        }
+
+	</script>
+
+
+{% endblock %}

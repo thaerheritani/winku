@@ -1,0 +1,43 @@
+{% extends 'profil/profil-layout.html.twig' %}
+
+
+{% block title %}profil{% endblock %}
+
+
+{% block body %}
+	{% include 'shared/nav.html.html.twig' %}
+	{% include 'shared/profil-card.html.twig' %}
+	<section>
+	<div class="gap gray-bg">
+	<div class="container-fluid">
+	<div class="row">
+	<div class="col-lg-12">
+	<div class="row" id="page-contents">
+
+{% block content %}
+
+	{% include 'shared/sidbarLeft.html.twig' %}
+	<div class="col-lg-6">
+
+		<div class="loadMore">
+			{% for post in posts %}
+				{% include 'shared/post-card.html.twig' %}
+			{% else %}
+				<p class="text-warning text-centr">Il n'y a pas des posts</p>
+
+			{% endfor %}
+		</div>
+	</div>
+	{% include 'shared/sidebarRight.html.twig' %}
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</section>
+	{% include 'shared/footer.html.twig' %}
+
+{% endblock  %}
+{% endblock body %}
+
+

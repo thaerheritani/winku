@@ -1,0 +1,27 @@
+{% extends 'accuil/public-layout.html.twig' %}
+
+{% block  pageTitle%} Bienvenue sur notre site winku{% endblock %}
+
+
+{% block content %}
+	{% include 'shared/sidbarLeft.html.twig' %}
+	<div class="col-lg-6">
+
+		<div class="loadMore">
+			{% for post in pagination %}
+
+				{% include 'shared/post-card.html.twig' %}
+			{% else %}
+				<p class="text-warning text-centr">Il n'y a pas des posts</p>
+
+			{% endfor %}
+		</div>
+	</div>
+	{% include 'shared/sidebarRight.html.twig' %}
+
+
+	<div class="pagination">
+		{{ knp_pagination_render(pagination) }}
+	</div>
+
+{% endblock %}

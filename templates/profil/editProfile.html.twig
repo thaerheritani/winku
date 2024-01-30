@@ -1,0 +1,42 @@
+{# templates/profil/editProfile.html.twig #}
+{% extends 'profil/profil-layout.html.twig' %}
+
+{% block title %}Modifier le Profil{% endblock %}
+
+{% block body %}
+	{% include 'shared/nav.html.html.twig' %}
+
+	{% include 'shared/profil-card.html.twig' %}
+	<section>
+		<div class="gap gray-bg">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="row" id="page-contents">
+							{% block content %}
+								{% include 'shared/sidbarLeft.html.twig' %}
+								<div class="col-lg-6">
+									<div class="loadMore">
+										<div class="central-meta item">
+											<div class="user-post">
+												<h1>Modifier le profil</h1>
+												{{ form_start(form) }}
+												{{ form_row(form.email) }}
+												{{ form_row(form.pseudo) }}
+												{{ form_row(form.plainPassword) }}
+												{{ form_row(form.save) }}
+												{{ form_end(form) }}
+											</div>
+										</div>
+									</div>
+								</div>
+								{% include 'shared/sidebarRight.html.twig' %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	{% include 'shared/footer.html.twig' %}
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'post/post-layout.html.twig' %}
+{% form_theme form 'bootstrap_5_horizontal_layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {# Vos fichiers CSS supplémentaires #}
+<link rel="stylesheet" href="chemin/vers/votre/style.css">
+{% endblock %}
+
+{% block pageTitle %} Édition du Post {% endblock %}
+
+{% block content %}
+    {% include 'shared/sidbarLeft.html.twig' %}
+<div class="row">
+	<div class="col-12">
+		{% for message in app.flashes('error') %}
+		<div class="alert alert-danger" role="alert">
+			{{ message }}
+		</div>
+		{% endfor %}
+		{{ form_start(form) }}
+		{# ... Champs pour l'édition du post ... #}
+		<div class="row mb-3">
+			{# Champ pour la galerie de photos #}
+			{{ form_label(form.gallery) }}
+			{{ form_errors(form.gallery) }}
+			<div class="col-sm-10">
+				{# Gestion de la galerie de photos #}
+				<ul id="photo-gallery-list" class="collection-form list-group list-group-horizontal"
+				    data-prototype="{{ form_widget(form.gallery.photos.vars.prototype)|e }}"
+				    data-widget-tags="{{ '<li class="list-group-item"></li>'|e }}"
+				    data-widget-counter="{{ form.gallery.photos|length }}">
+					{# Affichage des photos existantes du post #}
+					{% for photoField in form.gallery.photos %}
+						<li class="existantPhotos list-group-item">
+							<img src="{{ asset('uploads/' ~ photoField.vars.value.url) }}" alt="" width="100">
+							{{ form_widget(photoField, {'attr': {'class': 'd-none'}}) }}
+						</li>
+					{% endfor %}
+				</ul>
+				<button type="button"
+				        class="add-another-collection-widget btn btn-primary btn-sm"
+				        data-list-selector="#photo-gallery-list">+</button>
+
+				{# Indique que le champ a été rendu pour éviter les doublons #}
+				{% do form.gallery.setRendered %}
+			</div>
+		</div>
+		{# ... Autres champs pour l'édition du post ... #}
+		{{ form_end(form) }}
+	</div>
+</div>
+{% include 'shared/sidebarRight.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+	<script>
+        $(document).ready(function () {
+
+            $($('.add-another-collection-widget').attr('data-list-selector'))
+                .find('.existantPhotos').append(createButton());
+
+            $('.add-another-collection-widget').click(function (e) {
+                var list = $($(this).attr('data-list-selector'));
+                // Try to find the counter of the list or use the length of the list
+                var counter = list.data('widget-counter') || list.children().length;
+
+                // grab the prototype template
+                var newWidget = list.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your photos
+                // end name attribute looks like name="contact[photo][2]"
+                newWidget = newWidget.replace(/__name__/g, counter);
+                // Increase the counter
+                counter++;
+                // And store it, the length cannot be used if deleting widgets is allowed
+                list.data('widget-counter', counter);
+
+                // create a new list element and add it to the list
+                var newElem = $(list.attr('data-widget-tags')).html(newWidget);
+                var button = createButton();
+                newElem.find('input').after(button);
+
+                newElem.appendTo(list);
+            });
+
+
+        });
+
+        function createButton() {
+            var button = $('<button class="btn btn-danger removeElement" type="button">-</button>');
+            button.click(function(e) {
+                $(this).parents('li').remove();
+            });
+            return button;
+        }
+
+        // Récupérer l'input
+        let input = document.querySelector('input[name="tags"]');
+
+        // Ajouter un écouteur d'événement pour détecter les modifications sur l'input
+        input.addEventListener('input', function() {
+            // Récupérer la valeur de l'input
+            let value = input.value;
+
+            // Séparer la valeur de l'input en utilisant la virgule comme séparateur
+            let tags = value.split(',');
+
+            // Pour chaque tag, supprimer les espaces inutiles
+            tags = tags.map(function(tag) {
+                return tag.trim();
+            });
+
+            // Enregistrer les tags dans un tableau ou un objet pour les utiliser plus tard
+            // ...
+        });
+
+	</script>
+
+
+{% endblock %}
+
+

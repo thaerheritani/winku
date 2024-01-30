@@ -1,0 +1,22 @@
+{% extends 'commentair/post-layout.html.twig'%}
+
+
+
+{% block  pageTitle%} Bienvenue sur notre site winku{% endblock %}
+
+{% block content %}
+	{% include 'shared/sidbarLeft.html.twig' %}
+	<div class="col-lg-6">
+
+		<div class="loadMore">
+
+				{% include 'shared/post-card2.html.twig' %}
+
+		</div>
+	</div>
+	{% include 'shared/sidebarRight.html.twig' %}
+
+
+{% endblock %}
+
+

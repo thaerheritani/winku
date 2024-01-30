@@ -1,0 +1,28 @@
+<div class="topbar stick">
+	<div class="logo">
+		<a title="" href="{{ url('home') }}"><img src="{{ asset('images/logo.png') }}" alt=""></a>
+	</div>
+
+	<div class="top-area">
+		<div class="top-search">
+			<a href="{{ path('user_search') }}">Search user</a>
+		</div>
+		<div class="top-search">
+			<a href="{{ path('search_by_tags') }}">Search by tag</a>
+		</div>
+		<div class="top-search">
+		<a href="{{ path('create_post') }}">create post</a>
+		</div>
+		{% if app.user == null %}
+		<div class="top-search">
+			<a class="nav-link" href="{{ url('app_login') }}">Se connecter</a>
+		</div>
+		{% endif %}
+		{% if app.user != null %}
+		<div class="top-search">
+			<a href="{{ url('app_logout') }}">Se déconnecter</a>
+		</div>
+		{% endif %}
+
+	</div>
+</div>

@@ -1,0 +1,56 @@
+{% extends 'search/public-layout.html.twig' %}
+
+{% block pageTitle %} Bienvenue sur notre site winku {% endblock %}
+
+{% block content %}
+	{% include 'shared/sidbarLeft.html.twig' %}
+
+	<div class="col-lg-6">
+		<div class="central-meta">
+			<div class="frnds">
+				<ul class="nav nav-tabs">
+					<li class="nav-item"><a class="active" href="#frends" data-toggle="tab">My Friends</a> <span>55</span></li>
+					<li class="nav-item"><a class="" href="#frends-req" data-toggle="tab">Friend Requests</a><span>60</span></li>
+				</ul>
+				{{ form_start(searchForm) }}
+				{{ form_row(searchForm.pseudo) }}
+				{{ form_row(searchForm.search) }} {# Affiche le bouton de soumission #}
+				{{ form_end(searchForm) }}
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active fade show " id="frends">
+						<ul class="nearby-contct">
+							{% if users is not empty %}
+								{% for user in users %}
+									<li>
+										<div class="nearly-pepls">
+											<figure>
+												<a href="{{ path('user_profile', {'id': user.id}) }}" title="">
+													<!-- Utilisez les informations de l'utilisateur pour afficher l'image -->
+													<img src="{{ asset( 'uploads/'~user.profilePicture)}}" alt="{{ user.pseudo }}">
+												</a>
+											</figure>
+											<div class="pepl-info">
+												<h4>
+													<a href="{{ path('user_profile', {'id': user.id}) }}" title="">{{ user.pseudo }}</a>
+												</h4>
+												<!-- Utilisez les autres détails de l'utilisateur ici -->
+
+												<a href="#" title="" class="add-butn more-action" data-ripple="">unfriend</a>
+												<a href="#" title="" class="add-butn" data-ripple="">add friend</a>
+											</div>
+										</div>
+									</li>
+								{% endfor %}
+							{% else %}
+								<p>Aucun utilisateur trouvé.</p>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% include 'shared/sidebarRight.html.twig' %}
+{% endblock %}
